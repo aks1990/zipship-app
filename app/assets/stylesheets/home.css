@@ -1,0 +1,48 @@
+/*flash*/
+.alert-error {
+    background-color: #f2dede;
+    border-color: #eed3d7;
+    color: #b94a48;
+    text-align: left;
+ }
+
+.alert-alert {
+    background-color: #f2dede;
+    border-color: #eed3d7;
+    color: #b94a48;
+    text-align: left;
+ }
+
+.alert-success {
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    color: #468847;
+    text-align: left;
+ }
+
+.alert-notice {
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    color: #468847;
+    text-align: left;
+ }
+ /*Login Page Container Styles*/
+.container {
+    margin-top: 0 !important;
+    padding: 0 !important;
+}
+main.container > header {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    color: #969a9c;
+}
+/*Bulk Import Image*/
+#file_tools > img {
+    height: 20px;
+    width: 20px;
+}
+.file_type_error{
+    color:red;
+}
+.zone_type_error, .comma_sep_error{
+    color:red;
+}

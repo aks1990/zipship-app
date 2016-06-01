@@ -1,0 +1,72 @@
+<h2>Import Pincodes</h2>
+
+<%= form_tag import_home_index_path, multipart: true do %>
+  <%= file_field_tag :file, :accept => 'text/csv' %>
+  <%= file_field_tag :file1, :accept => 'text/csv' %>
+  <%= submit_tag "Import" %>
+<% end %>
+<br><br>
+<% unless @shopZipList.blank? %>
+	
+  
+    <table class="pincode_list">
+      <th>Pincode</th>
+      <th>&nbsp;</th>
+      <th>Action</th>
+     
+        <% @shopZipList.each do |zip_value| %>  
+          <tr>
+            <td>
+        	    <%= check_box_tag 'zip_ids[]', zip_value.id -%>
+        	    <%= h zip_value.pincode -%>
+            </td>
+            <td>&nbsp;</td>
+            <td>
+              <a href="javascript:void(0);" class="pincode_remove" data-id= '<%= zip_value.id %>'>x</a>
+            </td>  
+          </tr>
+        <% end %>  
+      
+    </table>
+  
+
+	<%= link_to 'Export CSV', exportCSV_home_index_path(format: :csv) %>
+<% end %>
+
+<%= form_for @zip_new_comm_sep, url: commaSeprtd_home_index_path, method: :post	 do |f| %>
+    <div class="pin_insert_comma_seperated">
+      <label>Enter Comma Seperated Pin:</label>
+      <%= text_area :zip, :pincode %>
+    </div>
+    <span>Ex: 90001,311021,302028</span><br><br>
+    <div class="new_pin_save">
+      <%= submit_tag "Save" %>
+    </div>
+<% end %>
+<form method='post' enctype='multipart/form-data' action=''>
+  <div class='file_upload' id='f1'><input name='file[]' type='file'/></div>
+  <div id='file_tools'>
+    <img src='images/file_add.png' id='add_file' title='Add new input'/>
+    <img src='images/file_del.png' id='del_file' title='Delete'/>
+  </div>
+  <input type='submit' name='upload' value='Upload'/>
+</form>
+
+<script type='text/javascript'>
+$(document).ready(function(){
+  var counter = 2;
+  $('#del_file').hide();
+  $('img#add_file').click(function(){
+    $('#file_tools').before('<div class="file_upload" id="f'+counter+'"><input name="file[]" type="file"></div>');
+    $('#del_file').fadeIn(0);
+  counter++;
+  });
+  $('img#del_file').click(function(){
+    if(counter==3){
+      $('#del_file').hide();
+    }   
+    counter--;
+    $('#f'+counter).remove();
+  });
+});
+</script>

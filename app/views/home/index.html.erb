@@ -1,0 +1,289 @@
+<div class="row">
+  <div class="col-md-12 col-sm-12 blk-import">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#home" data-toggle="tab"><i class="fa fa-home dashboard-div-icon"></i> </a>
+          </li>
+          <li class=""><a href="#settings" data-toggle="tab"><i class="fa fa-cogs dashboard-div-icon"></i></a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane fade active in" id="home">
+            <h4>Home Tab</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          </div>
+          <div class="tab-pane fade" id="settings">
+            <div class="panel-body">
+              <ul class="nav nav-pills">
+                <li class=""><a href="#home-pills" data-toggle="tab">Upload Settings</a>
+                </li>
+                <li class=""><a href="#profile-pills" data-toggle="tab">Appearance</a>
+                </li>
+                <li class=""><a href="#messages-pills" data-toggle="tab">Product Wise Shipping</a>
+                </li>
+              </ul>
+              <div class="tab-content theme-setting">
+                <div class="tab-pane fade" id="home-pills">
+                  <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                      <div class="panel-body">
+                        <div class="panel-group" id="accordion">
+                          <div class="panel panel-default">
+                            <div class="panel-heading">
+                              <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="collapsed"> <i class="fa fa-plus-square" aria-hidden="true"></i> <i class="fa fa-minus-square" aria-hidden="true"></i> Bulk Import</a>
+                              </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse" style="height: 0px;">
+                              <div class="panel-body">
+                                <div class="table-responsive">
+                                 <%= form_tag import_home_index_path, class: "bulk_import", multipart: true do %>
+                                    <table class="table table-striped">
+                                      <tbody>
+                                        <tr>
+                                          <td>
+                                              
+                                              <div class='file_upload' id='f1'>
+                                                <input type="textbox" id="f1" class="pin_zone_name" name="zone" placeholder="zone name">
+                                                
+                                                <input name='file[]' id='pincode_csv' type='file'/>
+                                                <span class="file_type_error"></span>
+                                              </div>
+                                              <!-- <div id='file_tools'>
+                                                <img src='assets/plus.png' id='add_file' title='Add new input'/>
+                                                <img src='assets/minus.jpg' id='del_file' title='Delete'/>
+                                              </div> -->
+                                              <input type='submit' name='upload' value='Upload'/>
+                                           
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  <% end %>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="panel panel-default">
+                            <div class="panel-heading">
+                              <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="collapsed"> <i class="fa fa-plus-square" aria-hidden="true"></i> <i class="fa fa-minus-square" aria-hidden="true"></i> Manual Import</a>
+                              </h4>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse" style="height: auto;">
+                              <div class="panel-body">
+                                <div class="form-row">
+                                  <%= form_for @zip_new_comm_sep, url: commaSeprtd_home_index_path, method: :post  do |f| %>
+                                    <div class="pin_insert_comma_seperated">
+                                      <%= f.select(:zone, Zip.select(:zone).map(&:zone).uniq, :prompt => 'Select Zone') %>
+                                      <label>Enter Comma Seperated Pin:</label>
+                                      <%= text_area :zip, :pincode %>
+
+                                    </div>
+                                    <span>Ex: 90001,311021,302028</span><br><br>
+                                    <span class="comma_sep_error"></span>
+                                    <div class="new_pin_save">
+                                      <%= submit_tag "Add" %>
+                                    </div>
+                                  <% end %>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="panel panel-default">
+                            <div class="panel-heading">
+                              <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" class="collapsed"> <i class="fa fa-plus-square" aria-hidden="true"></i> <i class="fa fa-minus-square" aria-hidden="true"></i> Export</a>
+                              </h4>
+                            </div>
+                            <div id="collapseThree" class="panel-collapse collapse">
+                              <div class="panel-body">
+                                <div class="form-row">
+                                  <label>Select Zone (s)</label> 
+                                  <select class="form-control">
+                                    <option>One Vale</option>
+                                    <option>Two Vale</option>
+                                    <option>Three Vale</option>
+                                    <option>Four Vale</option>
+                                  </select>
+                                  <button type="submit" class="btn btn-primary">EXPORT</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="profile-pills">
+                  <div class="col-sm-12 col-md-8">
+                    <h4><strong>Color / Font</strong></h4>
+                    <div class="table-responsive">
+                      <form>
+                        <table class="table table-striped">
+                          <tbody>
+                            <tr>
+                              <td>Heading</td>
+                              <td> Color </td>
+                              <td >
+                                <select class="form-control">
+                                  <option>One Vale</option>
+                                  <option>Two Vale</option>
+                                  <option>Three Vale</option>
+                                  <option>Four Vale</option>
+                                </select>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Success Message</td>
+                              <td> Color </td>
+                              <td >
+                                <select class="form-control">
+                                  <option>One Vale</option>
+                                  <option>Two Vale</option>
+                                  <option>Three Vale</option>
+                                  <option>Four Vale</option>
+                                </select>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Unsuccessfull Message</td>
+                              <td> Color </td>
+                              <td >
+                                <select class="form-control">
+                                  <option>One Vale</option>
+                                  <option>Two Vale</option>
+                                  <option>Three Vale</option>
+                                  <option>Four Vale</option>
+                                </select>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Button / Text</td>
+                              <td> Color </td>
+                              <td >
+                                <select class="form-control">
+                                  <option>One Vale</option>
+                                  <option>Two Vale</option>
+                                  <option>Three Vale</option>
+                                  <option>Four Vale</option>
+                                </select>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Button Background</td>
+                              <td> Color </td>
+                              <td >
+                                <select class="form-control">
+                                  <option>One Vale</option>
+                                  <option>Two Vale</option>
+                                  <option>Three Vale</option>
+                                  <option>Four Vale</option>
+                                </select>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Button Border</td>
+                              <td> Color </td>
+                              <td >
+                                <select class="form-control">
+                                  <option>One Vale</option>
+                                  <option>Two Vale</option>
+                                  <option>Three Vale</option>
+                                  <option>Four Vale</option>
+                                </select>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-4">
+                    <h4><strong>Apperance</strong></h4>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="messages-pills">
+                  <h4>Product Wise Shipping</h4>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type='text/javascript'>
+// $(document).ready(function(){
+//   var counter = 2;
+//   $('#del_file').hide();
+//   $('img#add_file').click(function(){
+//      counter++;
+//     if(counter==11){
+//       $('#file_tools').before('<div class="file_upload" id="f'+counter+'"><input type="textbox" name="file1[]" id="f'+counter+'" class="pin_zone_name" placeholder="zone name"><input name="file1[]" zone-type="Mumbai" type="file"></div>');
+//       $(this).hide();
+//     }
+//     else{
+//       $('#file_tools').before('<div class="file_upload" id="f'+counter+'"><input type="textbox" name="file1[]" id="f'+counter+'" class="pin_zone_name" placeholder="zone name"><input name="file1[]" zone-type="Mumbai" type="file"></div>');
+//         $('#del_file').fadeIn(0);
+//     }
+
+    
+//   });
+//   $('img#del_file').click(function(){
+//     if(counter==2){
+//       $('#del_file').hide();
+//     }   
+//     else{
+//       $('img#add_file').show();
+
+//     }
+
+//     counter--;
+//      console.log(counter);
+//     $('input#f'+counter).remove();
+//     $('#f'+counter).remove();
+//   });
+// });
+  $('.bulk_import').submit(function () {
+    var ext = $('#pincode_csv').val().split('.').pop().toLowerCase();
+    var zone = $('.pin_zone_name').val();
+    if(ext && zone){
+      if(ext=='csv') {
+       $('.file_type_error').empty();
+        return true;
+      }
+      else{
+        $('.file_type_error').text('*Invalid extension allowed only CSV extention files.')
+        return false;
+      }
+    }
+    else{
+      $('.file_type_error').text('*Zone and File can not be blank.')
+      return false;
+    }
+  });
+
+  $('.new_zip').submit(function () {
+    var ext = $('#zip_zone option:selected').text();
+      var zone = $('#zip_pincode').val();
+    if(ext!='Select Zone' && zone)
+    {
+      $('.comma_sep_error').empty();
+      return true;
+    }
+    else{
+      $('.comma_sep_error').text('*Zone and Pin can not be blank.');
+      return false;
+    }  
+  });
+</script>
+
+
+
+
