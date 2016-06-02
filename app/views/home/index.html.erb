@@ -100,14 +100,16 @@
                             <div id="collapseThree" class="panel-collapse collapse">
                               <div class="panel-body">
                                 <div class="form-row">
-                                  <label>Select Zone (s)</label> 
-                                  <select class="form-control">
-                                    <option>One Vale</option>
-                                    <option>Two Vale</option>
-                                    <option>Three Vale</option>
-                                    <option>Four Vale</option>
-                                  </select>
-                                  <button type="submit" class="btn btn-primary">EXPORT</button>
+                                  
+                                  <%= form_tag exportCSV_home_index_path(format: :csv),  method: :get, class: "bulk_export", multipart: true do %>
+                                    <div class="select_zone_for_export">
+                                      <label>Select Zone (s)</label> 
+                                      <%= select_tag(:zone, options_for_select(Zip.select(:zone).map(&:zone).uniq), :prompt => 'Select Zone') %>
+                                    </div>
+                                    <div class="zone_export">
+                                      <%= submit_tag "Export" %>
+                                    </div>
+                                  <% end %>
                                 </div>
                               </div>
                             </div>

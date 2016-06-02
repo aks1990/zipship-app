@@ -4,4 +4,4 @@
 # Examples:
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+  Zipcontent.create(heading: 'Shipping Calculator', avail_msg: 'Shipping is available here.', notavail_msg: 'Shipping is not available here.', success_txt_color: '#14c70e', fail_txt_color: '#e60909', btn_color: '#2d24e0', btn_font_color: '#fff', zipcount: 1)

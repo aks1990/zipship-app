@@ -11,7 +11,7 @@ class HomeController < ShopifyApp::AuthenticatedController
     @zip_new_comm_sep = Zip.new
     if @compare_shop_id.nil?
     
-      zipcontent = Zipcontent.find_by_id(10)
+      zipcontent = Zipcontent.find_by_zipcount(1)
 
       Home.create(:heading => zipcontent.heading,
                 :shopid => curr_store_id,
@@ -289,9 +289,10 @@ class HomeController < ShopifyApp::AuthenticatedController
   end
 
   def exportCSV
+    puts params
     session_data_all = ShopifyAPI::Shop.current
     curr_store_id = session_data_all.id
-    @pincodes = Zip.select("pincode").where("shopid": curr_store_id)
+    @pincodes = Zip.select("pincode").where("shopid": curr_store_id, "zone": params[:zone])
     respond_to do |format|
       
       format.html
