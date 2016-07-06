@@ -1,0 +1,220 @@
+ <div class="col-md-12 col-sm-12 blk-import">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#home" data-toggle="tab"><i class="fa fa-home dashboard-div-icon"></i> </a>
+          </li>
+          <li class=""><a href="#settings" data-toggle="tab"><i class="fa fa-cogs dashboard-div-icon"></i></a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane fade active in" id="home">
+            <h4>Home Tab</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          </div>
+          <div class="tab-pane fade" id="settings">
+            <div class="panel-body">
+              <ul class="nav nav-pills">
+                <li class=""><a href="#home-pills" data-toggle="tab">Upload Settings</a>
+                </li>
+                <li class=""><a href="#profile-pills" data-toggle="tab">Appearance</a>
+                </li>
+                <li class=""><a href="#messages-pills" data-toggle="tab">Product Wise Shipping</a>
+                </li>
+              </ul>
+              <div class="tab-content theme-setting">
+                <div class="tab-pane fade" id="home-pills">
+                  <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                      <div class="panel-body">
+                        <div class="panel-group" id="accordion">
+                          <div class="panel panel-default">
+                            <div class="panel-heading">
+                              <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="collapsed"> <i class="fa fa-plus-square" aria-hidden="true"></i> <i class="fa fa-minus-square" aria-hidden="true"></i> Bulk Import</a>
+                              </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse" style="height: 0px;">
+                              <div class="panel-body">
+                                <div class="table-responsive">
+                                 <%= form_tag import_home_index_path, class: "bulk_import", multipart: true, :remote => true do %>
+                                    <table class="table table-striped">
+                                      <tbody>
+                                        <tr>
+                                          <td>
+                                              
+                                              <div class='file_upload' id='f1'>
+                                                <input type="textbox" id="f1" class="pin_zone_name" name="zone" placeholder="zone name">
+                                                
+                                                <input name='file[]' id='pincode_csv' type='file'/>
+                                                
+                                              </div>
+                                              <!-- <div id='file_tools'>
+                                                <img src='assets/plus.png' id='add_file' title='Add new input'/>
+                                                <img src='assets/minus.jpg' id='del_file' title='Delete'/>
+                                              </div> -->
+                                              <input type='submit' name='upload' value='Upload'/>
+                                           
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  <% end %>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="panel panel-default">
+                            <div class="panel-heading">
+                              <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="collapsed"> <i class="fa fa-plus-square" aria-hidden="true"></i> <i class="fa fa-minus-square" aria-hidden="true"></i> Manual Import</a>
+                              </h4>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse" style="height: auto;">
+                              <div class="panel-body">
+                                <div class="form-row">
+                                  <%= form_for @zip_new_comm_sep, url: commaSeprtd_home_index_path, method: :post, :remote => true  do |f| %>
+                                    <div class="pin_insert_comma_seperated">
+                                      <%= f.select(:zone, @zip_zone_list, :prompt => 'Select Zone') %>
+                                      <label>Enter Comma Seperated Pin:</label>
+                                      <%= text_area :zip, :pincode %>
+
+                                    </div>
+                                    <span>Ex: 90001,311021,302028</span><br><br>
+                                    
+                                    <div class="new_pin_save">
+                                      <%= submit_tag "Add" %>
+                                    </div>
+                                  <% end %>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="panel panel-default">
+                            <div class="panel-heading">
+                              <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" class="collapsed"> <i class="fa fa-plus-square" aria-hidden="true"></i> <i class="fa fa-minus-square" aria-hidden="true"></i> Export</a>
+                              </h4>
+                            </div>
+                            <div id="collapseThree" class="panel-collapse collapse">
+                              <div class="panel-body">
+                                <div class="form-row">
+                                  
+                                  <%= form_tag exportCSV_home_index_path(format: :csv),  method: :get, class: "bulk_export", multipart: true do %>
+                                    <div class="select_zone_for_export">
+                                      <label>Select Zone (s)</label> 
+                                      <%= select_tag(:zone, options_for_select(@zip_zone_list), :prompt => 'Select Zone') %>
+                                    </div>
+                                    <div class="zone_export">
+                                      <%= submit_tag "Export", :class => 'zone_export_btn' %>
+                                    </div>
+                                  <% end %>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="profile-pills">
+                  <div class="col-sm-12 col-md-8">
+                    <h4><strong>Color / Font</strong></h4>
+                    <div class="table-responsive">
+                     
+                      <%= form_for(@home, :remote => true) do |f| %>
+                        <%= f.hidden_field :id %>
+                        <table class="table table-striped">
+                          <tbody>
+                            <tr>
+                              <td>Heading</td>
+                              <td> Text </td>
+                              <td >
+                                 <%= f.text_field :heading, :id => 'ship_heading' %>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Heading</td>
+                              <td> Color </td>
+                              <td >
+                                <%= f.text_field :heading_color, :id => 'textbox5' %>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Success Message</td>
+                              <td> Color </td>
+                              <td >
+                                <%= f.text_field :success_txt_color, :id => 'textbox1' %>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Unsuccessfull Message</td>
+                              <td> Color </td>
+                              <td >
+                                <%= f.text_field :fail_txt_color, :id => 'textbox2'%>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Button / Text</td>
+                              <td> Color </td>
+                              <td >
+                                <%= f.text_field :btn_font_color, :id => 'textbox3' %>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Button Background</td>
+                              <td> Color </td>
+                              <td >
+                                <%= f.text_field :btn_color, :id => 'textbox4' %>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Button Border</td>
+                              <td> Color </td>
+                              <td >
+                                <%= f.text_field :btn_border_color, :id => 'textbox6' %>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Shipping Available Message</td>
+                              <td> Text </td>
+                              <td >
+                                <%= text_area :home, :avail_msg %>
+                              </td>
+                            </tr>
+                             <tr>
+                              <td>Shipping Not Available Message</td>
+                              <td> Text </td>
+                              <td >
+                                <%= text_area :home, :notavail_msg %>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="css_modified_content">
+                                  <%= submit_tag "Update", :class => 'appearance_update' %>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      <% end %>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-4">
+                    <h4><strong>Apperance</strong></h4>
+                    <%= @curr_design.html_safe %>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="messages-pills">
+                  <h4>Product Wise Shipping</h4>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

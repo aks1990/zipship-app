@@ -1,4 +1,7 @@
-<div class="row">
+<div class="loading_overlay">
+    <div id="loading-img"><img src='assets/loader.gif'></div>
+</div>
+<div class="row tab_content_update">
   <div class="col-md-12 col-sm-12 blk-import">
     <div class="panel panel-default">
       <div class="panel-body">
@@ -38,7 +41,7 @@
                             <div id="collapseOne" class="panel-collapse collapse" style="height: 0px;">
                               <div class="panel-body">
                                 <div class="table-responsive">
-                                 <%= form_tag import_home_index_path, class: "bulk_import", multipart: true do %>
+                                 <%= form_tag import_home_index_path, class: "bulk_import", multipart: true, :remote => true do %>
                                     <table class="table table-striped">
                                       <tbody>
                                         <tr>
@@ -48,7 +51,7 @@
                                                 <input type="textbox" id="f1" class="pin_zone_name" name="zone" placeholder="zone name">
                                                 
                                                 <input name='file[]' id='pincode_csv' type='file'/>
-                                                <span class="file_type_error"></span>
+                                                
                                               </div>
                                               <!-- <div id='file_tools'>
                                                 <img src='assets/plus.png' id='add_file' title='Add new input'/>
@@ -74,15 +77,15 @@
                             <div id="collapseTwo" class="panel-collapse collapse" style="height: auto;">
                               <div class="panel-body">
                                 <div class="form-row">
-                                  <%= form_for @zip_new_comm_sep, url: commaSeprtd_home_index_path, method: :post  do |f| %>
+                                  <%= form_for @zip_new_comm_sep, url: commaSeprtd_home_index_path, method: :post, :remote => true  do |f| %>
                                     <div class="pin_insert_comma_seperated">
-                                      <%= f.select(:zone, Zip.select(:zone).map(&:zone).uniq, :prompt => 'Select Zone') %>
+                                      <%= f.select(:zone, @zip_zone_list, :prompt => 'Select Zone') %>
                                       <label>Enter Comma Seperated Pin:</label>
                                       <%= text_area :zip, :pincode %>
 
                                     </div>
                                     <span>Ex: 90001,311021,302028</span><br><br>
-                                    <span class="comma_sep_error"></span>
+                                    
                                     <div class="new_pin_save">
                                       <%= submit_tag "Add" %>
                                     </div>
@@ -104,10 +107,10 @@
                                   <%= form_tag exportCSV_home_index_path(format: :csv),  method: :get, class: "bulk_export", multipart: true do %>
                                     <div class="select_zone_for_export">
                                       <label>Select Zone (s)</label> 
-                                      <%= select_tag(:zone, options_for_select(Zip.select(:zone).map(&:zone).uniq), :prompt => 'Select Zone') %>
+                                      <%= select_tag(:zone, options_for_select(@zip_zone_list), :prompt => 'Select Zone') %>
                                     </div>
                                     <div class="zone_export">
-                                      <%= submit_tag "Export" %>
+                                      <%= submit_tag "Export", :class => 'zone_export_btn' %>
                                     </div>
                                   <% end %>
                                 </div>
@@ -123,88 +126,91 @@
                   <div class="col-sm-12 col-md-8">
                     <h4><strong>Color / Font</strong></h4>
                     <div class="table-responsive">
-                      <form>
+                     
+                      <%= form_for(@home, :remote => true) do |f| %>
+                        <%= f.hidden_field :id %>
                         <table class="table table-striped">
                           <tbody>
                             <tr>
                               <td>Heading</td>
+                              <td> Text </td>
+                              <td >
+                                 <%= f.text_field :heading, :id => 'ship_heading' %>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Heading</td>
                               <td> Color </td>
                               <td >
-                                <select class="form-control">
-                                  <option>One Vale</option>
-                                  <option>Two Vale</option>
-                                  <option>Three Vale</option>
-                                  <option>Four Vale</option>
-                                </select>
+                                <%= f.text_field :heading_color, :id => 'textbox5' %>
                               </td>
                             </tr>
                             <tr>
                               <td>Success Message</td>
                               <td> Color </td>
                               <td >
-                                <select class="form-control">
-                                  <option>One Vale</option>
-                                  <option>Two Vale</option>
-                                  <option>Three Vale</option>
-                                  <option>Four Vale</option>
-                                </select>
+                                <%= f.text_field :success_txt_color, :id => 'textbox1' %>
                               </td>
                             </tr>
                             <tr>
                               <td>Unsuccessfull Message</td>
                               <td> Color </td>
                               <td >
-                                <select class="form-control">
-                                  <option>One Vale</option>
-                                  <option>Two Vale</option>
-                                  <option>Three Vale</option>
-                                  <option>Four Vale</option>
-                                </select>
+                                <%= f.text_field :fail_txt_color, :id => 'textbox2'%>
                               </td>
                             </tr>
                             <tr>
                               <td>Button / Text</td>
                               <td> Color </td>
                               <td >
-                                <select class="form-control">
-                                  <option>One Vale</option>
-                                  <option>Two Vale</option>
-                                  <option>Three Vale</option>
-                                  <option>Four Vale</option>
-                                </select>
+                                <%= f.text_field :btn_font_color, :id => 'textbox3' %>
                               </td>
                             </tr>
                             <tr>
                               <td>Button Background</td>
                               <td> Color </td>
                               <td >
-                                <select class="form-control">
-                                  <option>One Vale</option>
-                                  <option>Two Vale</option>
-                                  <option>Three Vale</option>
-                                  <option>Four Vale</option>
-                                </select>
+                                <%= f.text_field :btn_color, :id => 'textbox4' %>
                               </td>
                             </tr>
                             <tr>
                               <td>Button Border</td>
                               <td> Color </td>
                               <td >
-                                <select class="form-control">
-                                  <option>One Vale</option>
-                                  <option>Two Vale</option>
-                                  <option>Three Vale</option>
-                                  <option>Four Vale</option>
-                                </select>
+                                <%= f.text_field :btn_border_color, :id => 'textbox6' %>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Shipping Available Message</td>
+                              <td> Text </td>
+                              <td >
+                                <%= text_area :home, :avail_msg %>
+                              </td>
+                            </tr>
+                             <tr>
+                              <td>Shipping Not Available Message</td>
+                              <td> Text </td>
+                              <td >
+                                <%= text_area :home, :notavail_msg %>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="css_modified_content">
+                                  <%= submit_tag "Update", :class => 'appearance_update' %>
+                                </div>
                               </td>
                             </tr>
                           </tbody>
                         </table>
-                      </form>
+                      <% end %>
                     </div>
                   </div>
-                  <div class="col-sm-12 col-md-4">
+                  <div class="col-sm-12 col-md-4 ">
                     <h4><strong>Apperance</strong></h4>
+                    <div class="ship_preview">
+                      <%= @curr_design.html_safe %>
+                    </div>
                   </div>
                 </div>
                 <div class="tab-pane fade" id="messages-pills">
@@ -221,52 +227,22 @@
 </div>
 
 <script type='text/javascript'>
-// $(document).ready(function(){
-//   var counter = 2;
-//   $('#del_file').hide();
-//   $('img#add_file').click(function(){
-//      counter++;
-//     if(counter==11){
-//       $('#file_tools').before('<div class="file_upload" id="f'+counter+'"><input type="textbox" name="file1[]" id="f'+counter+'" class="pin_zone_name" placeholder="zone name"><input name="file1[]" zone-type="Mumbai" type="file"></div>');
-//       $(this).hide();
-//     }
-//     else{
-//       $('#file_tools').before('<div class="file_upload" id="f'+counter+'"><input type="textbox" name="file1[]" id="f'+counter+'" class="pin_zone_name" placeholder="zone name"><input name="file1[]" zone-type="Mumbai" type="file"></div>');
-//         $('#del_file').fadeIn(0);
-//     }
-
-    
-//   });
-//   $('img#del_file').click(function(){
-//     if(counter==2){
-//       $('#del_file').hide();
-//     }   
-//     else{
-//       $('img#add_file').show();
-
-//     }
-
-//     counter--;
-//      console.log(counter);
-//     $('input#f'+counter).remove();
-//     $('#f'+counter).remove();
-//   });
-// });
+$(document).ready(function(){
   $('.bulk_import').submit(function () {
     var ext = $('#pincode_csv').val().split('.').pop().toLowerCase();
     var zone = $('.pin_zone_name').val();
     if(ext && zone){
       if(ext=='csv') {
-       $('.file_type_error').empty();
+        $(".loading_overlay").show();
         return true;
       }
       else{
-        $('.file_type_error').text('*Invalid extension allowed only CSV extention files.')
+      toastr.warning('Invalid extension allowed only CSV extention files')
         return false;
       }
     }
     else{
-      $('.file_type_error').text('*Zone and File can not be blank.')
+      toastr.warning('Zone and File can not be blank')
       return false;
     }
   });
@@ -276,14 +252,107 @@
       var zone = $('#zip_pincode').val();
     if(ext!='Select Zone' && zone)
     {
-      $('.comma_sep_error').empty();
+      $(".loading_overlay").show();
       return true;
     }
     else{
-      $('.comma_sep_error').text('*Zone and Pin can not be blank.');
+      toastr.warning('Zone and Pin can not be blank')
       return false;
     }  
   });
+
+  $('.zone_export_btn').click(function(){
+   
+    var ext = $('.select_zone_for_export select option:selected').text();
+      
+    if(ext!='Select Zone')
+    {
+      toastr.success('Successfully Exported')
+      return true;
+    }
+    else{
+      toastr.warning('Zone can not be blank')
+      return false;
+    }  
+  });
+
+  $('form.new_zip').bind('ajax:complete', function(evt, xhr){
+    $(".loading_overlay").hide();
+    toastr.success('Successfully Imported')
+    $('#zip_zone').val('');
+    $('#zip_pincode').val('');
+  });
+
+  $('form.edit_home').bind('ajax:complete', function(evt, xhr){
+    $.ajax({
+            type: 'GET',
+            url: '/home/updatePreview',
+            dataType: 'html',
+            success: function(cartdata){
+              //var ship_updated_view = $.parseHTML(cartdata);
+              $('.ship_preview').empty();
+              $('.ship_preview').html(cartdata);
+              //alert(cartdata);
+              $(".loading_overlay").hide();
+              toastr.success('Successfully Updated')
+            }
+          });
+  });
+  
+
+  $('form.bulk_import').bind('ajax:complete', function(evt, xhr){
+    $('.pin_zone_name').val('');
+    $('#pincode_csv').val('');
+    var all_zones = new Array();
+    var count = 0;
+     $.ajax({
+                type: 'GET',
+                url: '/home/zoneDropdownupdate',
+                dataType: 'json',
+                success: function(cartdata){
+                  $(".loading_overlay").hide();
+                  toastr.success('Successfully Imported')
+                  $('#zip_zone, .select_zone_for_export #zone').empty();
+                 
+                  $('#zip_zone, .select_zone_for_export #zone').html('<option value="">Select Zone</option>');
+                  
+                  $.each(cartdata,function(key,value){
+                    $('#zip_zone, .select_zone_for_export #zone').append('<option value="'+value['zone']+'">'+value['zone']+'</option>'); 
+                  })
+                  
+                }
+              });
+  });
+
+  $('.appearance_update').click(function(){
+    var heading_txt = $('#ship_heading').val();
+    var succ_msg_color = $('#textbox1.minicolors-input').val();
+    var unsucc_msg_color = $('#textbox2.minicolors-input').val();
+    var btn_txt_color = $('#textbox3.minicolors-input').val();
+    var btn_bg_color = $('#textbox4.minicolors-input').val();
+    var heading_color = $('#textbox5.minicolors-input').val();
+    var btn_border_color = $('#textbox6.minicolors-input').val();
+    var avail_msg = $('#home_avail_msg').text();
+    var notavail_msg = $('#home_notavail_msg').text();
+    if(heading_txt && succ_msg_color && unsucc_msg_color && btn_txt_color && btn_bg_color && avail_msg && notavail_msg && heading_color && btn_border_color){
+        $(".loading_overlay").show();
+        return true;
+      }
+      else{
+        toastr.warning('Heading Text, Heading Color, Success Message Color, Unsuccess Message Color, Button Text Color, Button Background Color, Button Border Color, Available Message, Notavailable Message can not be blank')
+      }
+  });
+  
+
+ $('#textbox1').minicolors();
+ $('#textbox2').minicolors();
+ $('#textbox3').minicolors();
+ $('#textbox4').minicolors();
+ $('#textbox5').minicolors();
+ $('#textbox6').minicolors();
+
+});
+
 </script>
 
 

@@ -1,13 +1,13 @@
 class HomeController < ShopifyApp::AuthenticatedController
   require 'json'
   require 'csv'
-
+  
   def index
     @session_data_all = ShopifyAPI::Shop.current
     curr_store_id = @session_data_all.id
     
     @compare_shop_id = Home.find_by_shopid(curr_store_id)
-    @zip_zone_list = Zip.select(:zone).map(&:zone).uniq
+    @zip_zone_list = Zip.select(:zone).where(:shopid => curr_store_id).map(&:zone).uniq
     @zip_new_comm_sep = Zip.new
     if @compare_shop_id.nil?
     
@@ -20,12 +20,14 @@ class HomeController < ShopifyApp::AuthenticatedController
                 :success_txt_color => zipcontent.success_txt_color,
                 :fail_txt_color => zipcontent.fail_txt_color,
                 :btn_color => zipcontent.btn_color,
-                :btn_font_color => zipcontent.btn_font_color
+                :btn_font_color => zipcontent.btn_font_color,
+                :heading_color => zipcontent.heading_color,
+                :btn_border_color =>  zipcontent.btn_border_color
         )
 
 
       names = Array.new
-      @zip_list = Zip.all
+      @zip_list = Zip.where(:shopid => curr_store_id)
 
       @zip_list.each do |zip_list|
         names << {"id": zip_list.id, "pincode": zip_list.pincode}
@@ -86,13 +88,14 @@ class HomeController < ShopifyApp::AuthenticatedController
                            '<!-- =====================CSS=========================='+
                            '================================================= -->'+
                            '<style>.add-product-loader {display: none;float: right;}'+
+                           '.ship_calculator span h2{color:'+zipcontent.heading_color+' !important; }'+
                           '.ship_calculator{width:100%;}'+
                           '.ship_postal_srch{width:20%; }'+
-                          '.cart_imp{color:'+zipcontent.fail_txt_color+'; }'+
+                          '.cart_imp{color:red; }'+
                           '.ship_calculator input{padding:0 !important; margin:0 !important; }'+
                           '#ship_target {margin-top: 20px; color:'+zipcontent.success_txt_color+';}'+
-                          '.postal_error{color:red;font-weight: bold;}'+
-                          '.btn.shipping_status.action_button {margin-top: 10px;width: 100%;background-color:'+zipcontent.btn_color+' !important;color:'+zipcontent.btn_font_color+'!important; }</style>'
+                          '.postal_error{color:'+zipcontent.fail_txt_color+';font-weight: bold;}'+
+                          '.btn.shipping_status.action_button {margin-top: 10px;width: 100%;border: 1px solid '+zipcontent.btn_border_color+' !important;background-color:'+zipcontent.btn_color+' !important;color:'+zipcontent.btn_font_color+'!important; }</style>'
 
       @asset_snippet.save
       # End here=========================================================
@@ -113,7 +116,7 @@ class HomeController < ShopifyApp::AuthenticatedController
       zipcontent = Home.find_by_shopid(curr_store_id)
 
       names = Array.new
-      @zip_list = Zip.all
+      @zip_list = Zip.where(:shopid => curr_store_id)
 
       @zip_list.each do |zip_list|
         names << {"id": zip_list.id, "pincode": zip_list.pincode}
@@ -174,13 +177,14 @@ class HomeController < ShopifyApp::AuthenticatedController
                            '<!-- =====================CSS=========================='+
                            '================================================= -->'+
                            '<style>.add-product-loader {display: none;float: right;}'+
+                           '.ship_calculator span h2{color:'+zipcontent.heading_color+' !important; }'+
                           '.ship_calculator{width:100%;}'+
                           '.ship_postal_srch{width:20%; }'+
-                          '.cart_imp{color:'+zipcontent.fail_txt_color+'; }'+
+                          '.cart_imp{color:red; }'+
                           '.ship_calculator input{padding:0 !important; margin:0 !important; }'+
                           '#ship_target {margin-top: 20px; color:'+zipcontent.success_txt_color+';}'+
-                          '.postal_error{color:red;font-weight: bold;}'+
-                          '.btn.shipping_status.action_button {margin-top: 10px;width: 100%;background-color:'+zipcontent.btn_color+' !important;color:'+zipcontent.btn_font_color+'!important; }</style>'
+                          '.postal_error{color:'+zipcontent.fail_txt_color+';font-weight: bold;}'+
+                          '.btn.shipping_status.action_button {margin-top: 10px;width: 100%;border: 1px solid '+zipcontent.btn_border_color+' !important;background-color:'+zipcontent.btn_color+' !important;color:'+zipcontent.btn_font_color+'!important; }</style>'
 
       @asset_snippet.save
       # End here=========================================================
@@ -198,34 +202,16 @@ class HomeController < ShopifyApp::AuthenticatedController
       # End here=========================================================
 
     end
-  end
-
-  def ziphome
-    session_data_all = ShopifyAPI::Shop.current
-    curr_store_id = session_data_all.id
-
-    @edit_css = Home.find_by_shopid(curr_store_id)
-  end
-
-  def edit
-    @home = Home.find_by_id(params[:id])
+    @home = Home.find_by_shopid(curr_store_id)
+    @ship_popup = ShopifyAPI::Asset.find('snippets/ZipCode.liquid')
+    @curr_design = @ship_popup.value
   end
 
   def update
     @home = Home.find(params[:home][:id])
     if @home.update_attributes(content_params)
-      flash[:success] = "CSS updated"
       redirect_to action: "index"
-    else
-      render 'edit'
     end
-  end
-
-  def pincodeList
-    @zip_new_comm_sep = Zip.new
-    session_data_all = ShopifyAPI::Shop.current
-    curr_store_id = session_data_all.id 
-    @shopZipList = Zip.where(shopid: curr_store_id)
   end
 
   def import
@@ -234,7 +220,6 @@ class HomeController < ShopifyApp::AuthenticatedController
       puts '========zone==============='
       
       params[:file].each do |file_name|
-        file_ext = file_name.path.split('.').last
           @session_data_all = ShopifyAPI::Shop.current
           curr_store_id = @session_data_all.id
           zipcodes = Zip.all()
@@ -244,6 +229,7 @@ class HomeController < ShopifyApp::AuthenticatedController
           zipcodes.each do |zip|
               zipList << {"pincode": zip.pincode, "shopid": zip.shopid, "zone": zip.zone}
           end
+          puts file_name.path
           CSV.foreach(file_name.path) do |row|
             puts "==================row============="
             puts row.inspect
@@ -258,7 +244,6 @@ class HomeController < ShopifyApp::AuthenticatedController
           zipUniqueList.each do |zip_unq|
             Zip.create(:pincode => zip_unq[:pincode], :shopid => zip_unq[:shopid], :zone => zip_unq[:zone])
           end
-          flash[:notice] = "Pincodes imported."
       end
       redirect_to action: "index"
   end
@@ -294,9 +279,25 @@ class HomeController < ShopifyApp::AuthenticatedController
     curr_store_id = session_data_all.id
     @pincodes = Zip.select("pincode").where("shopid": curr_store_id, "zone": params[:zone])
     respond_to do |format|
-      
       format.html
       format.csv { send_data @pincodes.to_csv, filename: "pincodes-#{Date.today}.csv" }
+    end
+  end
+
+  def zoneDropdownupdate 
+    session_data_all = ShopifyAPI::Shop.current
+    curr_store_id = session_data_all.id
+    @dropdown_all = Zip.select(:zone).where(:shopid => curr_store_id).uniq
+      respond_to do |format|
+        format.json { render :json => @dropdown_all }
+      end
+  end
+
+  def updatePreview
+    @update_ship_popup = ShopifyAPI::Asset.find('snippets/ZipCode.liquid')
+    @update_curr_design = @update_ship_popup.value
+    respond_to do |format|
+      format.html { render :js => @update_curr_design }
     end
   end
 
@@ -304,6 +305,6 @@ class HomeController < ShopifyApp::AuthenticatedController
 
     def content_params
       params.require(:home).permit(:success_txt_color, :fail_txt_color, :btn_font_color,
-                                   :btn_color, :heading, :avail_msg, :notavail_msg)
+                                   :btn_color, :btn_border_color, :heading, :heading_color, :avail_msg, :notavail_msg)
     end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160602052506) do
+ActiveRecord::Schema.define(version: 20160607085756) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,8 @@ ActiveRecord::Schema.define(version: 20160602052506) do
     t.string   "fail_txt_color"
     t.string   "btn_color"
     t.string   "btn_font_color"
+    t.string   "btn_border_color"
+    t.string   "heading_color"
   end
 
   create_table "shops", force: :cascade do |t|
@@ -49,6 +51,8 @@ ActiveRecord::Schema.define(version: 20160602052506) do
     t.string   "btn_color"
     t.string   "btn_font_color"
     t.integer  "zipcount"
+    t.string   "heading_color"
+    t.string   "btn_border_color"
   end
 
   create_table "zips", force: :cascade do |t|

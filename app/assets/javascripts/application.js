@@ -15,6 +15,8 @@
 //= require jquery.minicolors.simple_form
 //= require bootstrap-sprockets
 //= require jquery_ujs
+//= require jquery.remotipart
+//= require toastr
 //= require turbolinks
 //= require_tree .
 

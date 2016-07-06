@@ -4,11 +4,11 @@ Rails.application.routes.draw do
   root :to => 'home#index'
   resources :home do
     collection do
-      get 'ziphome'
-      get 'pincodeList'
       post 'import'
       post 'commaSeprtd'
       get 'exportCSV'
+      get 'zoneDropdownupdate'
+      get 'updatePreview'
     end
   end
   mount ShopifyApp::Engine, at: '/'
