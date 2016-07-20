@@ -222,19 +222,21 @@ class HomeController < ShopifyApp::AuthenticatedController
       params[:file].each do |file_name|
           @session_data_all = ShopifyAPI::Shop.current
           curr_store_id = @session_data_all.id
-          zipcodes = Zip.all()
+          zipcodes = Zip.all
           zipList = Array.new
           zipCsvList = Array.new
           zipUniqueList = Array.new
           zipcodes.each do |zip|
               zipList << {"pincode": zip.pincode, "shopid": zip.shopid, "zone": zip.zone}
           end
-          puts file_name.path
+          
           CSV.foreach(file_name.path) do |row|
             puts "==================row============="
             puts row.inspect
             pin_filter = row.inspect.split('"')
+            if pin_filter[1] != 'pincodes'
               zipCsvList << {"pincode": pin_filter[1], "shopid": curr_store_id, "zone": selected_filter_zone }
+            end
           end
           puts zipCsvList
           puts '========='
@@ -254,7 +256,7 @@ class HomeController < ShopifyApp::AuthenticatedController
     zip_array = Array.new
     zip_list = Array.new
     zipUniqueList = Array.new
-    zipcodes = Zip.all()
+    zipcodes = Zip.all
     zip_values = params[:zip][:pincode].split(',')
    
     zip_values.each do |pin|
@@ -280,7 +282,15 @@ class HomeController < ShopifyApp::AuthenticatedController
     @pincodes = Zip.select("pincode").where("shopid": curr_store_id, "zone": params[:zone])
     respond_to do |format|
       format.html
-      format.csv { send_data @pincodes.to_csv, filename: "pincodes-#{Date.today}.csv" }
+      format.csv { send_data @pincodes.to_csv, filename: "#{params[:zone]}-#{Date.today}.csv" }
+    end
+  end
+
+  def demoexportCSV 
+    @demopincodes = Demo.all
+    respond_to do |format|
+      format.html
+      format.csv { send_data @demopincodes.to_csv, filename: "Demo-#{Date.today}.csv" }
     end
   end
 

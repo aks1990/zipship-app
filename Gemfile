@@ -34,6 +34,7 @@ gem 'jquery-minicolors-rails'
 gem 'font-awesome-sass', '~> 4.6.2'
 gem 'toastr-rails'
 gem 'remotipart', '~> 1.2'
+
 # gem 'remotipart', '~> 1.2'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

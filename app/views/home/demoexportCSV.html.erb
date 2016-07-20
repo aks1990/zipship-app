@@ -1,0 +1,3 @@
+<%- @demopincodes.each do |pin| -%>
+<%= CSV.generate_line([pin.pincode]) -%>
+<%- end -%>

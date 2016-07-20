@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       post 'import'
       post 'commaSeprtd'
       get 'exportCSV'
+      get 'demoexportCSV'
       get 'zoneDropdownupdate'
       get 'updatePreview'
     end

@@ -58,7 +58,7 @@
                                                 <img src='assets/minus.jpg' id='del_file' title='Delete'/>
                                               </div> -->
                                               <input type='submit' name='upload' value='Upload'/>
-                                           
+                                           <%= link_to "Download Demo", demoexportCSV_home_index_path(format: :csv),method: :get,multipart: true %>
                                           </td>
                                         </tr>
                                       </tbody>
